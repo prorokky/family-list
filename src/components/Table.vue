@@ -1,31 +1,22 @@
 <template>
   <div class="family">
-    <table>
-      <tbody>
-      <tr>
-        <th scope="col">ФИО</th>
-        <th scope="col">Дата рождения</th>
-      </tr>
-      <tr v-for="member of filteredMembers">
-        <td>
-          {{ member.name }}
-          <router-link to="{path: '/info'}">
-            <button class="info">i</button>
-          </router-link>
-          <button class="delete"
-                  @click="deleteMember(member.id)">&times;
-          </button>
-        </td>
-        <td>{{ member.birthDate }}</td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="table" v-if="members.length !== 0">
+      <TableHeader />
+      <MembersList v-for="member of filteredMembers" v-bind:member="member" @deleteMember="deleteMember"/>
+    </div>
+    <div v-else>
+      <p class="empty">Список родственников пуст. Добавьте родственника.</p>
+    </div>
   </div>
 </template>
 
 <script>
+import MembersList from "@/components/MembersList";
+import TableHeader from "@/components/TableHeader";
+
 export default {
   name: "Table",
+  components: {TableHeader, MembersList},
   props: {
     members: {
       type: Array
@@ -35,8 +26,10 @@ export default {
     }
   },
   methods: {
-    deleteMember: function (id) {
-      this.$emit("deleteMember", id)
+    deleteMember: function (data) {
+      this.$emit("deleteMember", {
+        id: data.id
+      })
     }
   }
 }
@@ -48,52 +41,9 @@ export default {
   margin-top: 20px;
 }
 
-table {
-  border: 1px solid #ccc;
-  border-collapse: collapse;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  table-layout: fixed;
-}
-
-thead {
-  border: none;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-
-tr {
-  background-color: #f8f8f8;
-  border: 1px solid #ddd;
-  padding: .35em;
-}
-
-th, td {
-  padding: .625em;
+.empty {
   text-align: center;
-}
-
-.delete {
-  background: red;
-  color: #fff;
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  font-weight: bold;
-}
-
-.info {
-  background: #0c9ad0;
-  color: #fff;
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  font-weight: bold;
+  color: red;
+  font-size: 30px;
 }
 </style>

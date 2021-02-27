@@ -1,6 +1,5 @@
 <template>
   <div>
-    vfdnvndv
   </div>
 </template>
 

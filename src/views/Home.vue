@@ -15,8 +15,8 @@ export default {
   data: () => {
     return {
       members: [
-        {id: 1, name: "Гапонов Владислав Родионович", birthDate: "2001-01-01"},
-        {id: 2, name: "Иванов Иван Иванович", birthDate: "1997-01-01"}
+        {id: 0, name: "Гапонов Владислав Родионович", birthDate: "2001-01-01"},
+        {id: 1, name: "Иванов Иван Иванович", birthDate: "1997-02-01"}
       ],
       search: "",
     }
@@ -26,8 +26,8 @@ export default {
       let newMember = {id: this.members.length+1, name: data.name, birthDate: data.birthDate}
       this.members.push(newMember)
     },
-    deleteMember: function (id) {
-      this.members = this.members.filter(m => m.id !== id)
+    deleteMember: function (data) {
+      this.members = this.members.filter(m => m.id !== data.id)
     }
   },
   computed: {
