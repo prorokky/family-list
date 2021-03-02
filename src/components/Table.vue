@@ -1,22 +1,21 @@
 <template>
   <div class="family">
     <div class="table" v-if="members.length !== 0">
-      <TableHeader />
-      <MembersList v-for="member of filteredMembers" v-bind:member="member" @deleteMember="deleteMember"/>
-    </div>
-    <div v-else>
-      <p class="empty">Список родственников пуст. Добавьте родственника.</p>
+      <div class="tr">
+        <p class="th">ФИО</p>
+        <p class="th">Дата рождения (гггг-мм-дд)</p>
+      </div>
+      <MembersList v-for="member of filteredMembers" v-bind:member="member" v-bind:members="members" @deleteMember="deleteMember"/>
     </div>
   </div>
 </template>
 
 <script>
 import MembersList from "@/components/MembersList";
-import TableHeader from "@/components/TableHeader";
 
 export default {
   name: "Table",
-  components: {TableHeader, MembersList},
+  components: {MembersList},
   props: {
     members: {
       type: Array
@@ -41,9 +40,26 @@ export default {
   margin-top: 20px;
 }
 
-.empty {
+.table {
+  display: table;
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.tr {
+  display: table-row;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: .35em;
+}
+
+.th {
+  display: table-cell;
+  padding: .625em;
   text-align: center;
-  color: red;
-  font-size: 30px;
 }
 </style>

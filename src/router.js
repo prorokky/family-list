@@ -13,8 +13,14 @@ export default new Router({
             component: Home
         },
         {
-            path: "/info/:member",
-            component: MemberInfo
+            path: "/info/:id",
+            name: "Info",
+            component: MemberInfo,
+            props: true
         }
     ]
 })
+
+
+
+

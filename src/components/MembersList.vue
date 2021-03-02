@@ -2,7 +2,7 @@
   <div class="tr">
     <p class="td">
       {{ member.name }}
-      <router-link to="{path: '/info'}">
+      <router-link :to="{ path: `info/${member.id}`, params: { id: `${member.id}` }, query: { members: members } }">
         <button class="info">i</button>
       </router-link>
       <button class="delete"
@@ -19,6 +19,9 @@ export default {
   props: {
     member: {
       type: Object
+    },
+    members: {
+      type: Array
     }
   },
   methods: {
@@ -31,7 +34,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .tr {
   display: table-row;
   background-color: #f8f8f8;
@@ -61,5 +64,12 @@ export default {
   height: 25px;
   border-radius: 50%;
   font-weight: bold;
+}
+
+button {
+  height: 25px;
+  margin: 5px;
+  padding: 0;
+  font-size: 16px;
 }
 </style>
