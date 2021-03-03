@@ -47,15 +47,17 @@ export default {
       }
   },
   mounted: function() {
-    this.members.forEach(ms => {
-      this.$route.query.members.forEach(rm => {
-        if(ms.id === rm.id) {
-          ms.name = rm.name
-          ms.birthDate = rm.birthDate
-          ms.relatives = rm.relatives
-        }
+    if(this.$route.query.members !== undefined) {
+      this.members.forEach(ms => {
+        this.$route.query.members.forEach(rm => {
+          if(ms.id === rm.id) {
+            ms.name = rm.name
+            ms.birthDate = rm.birthDate
+            ms.relatives = rm.relatives
+          }
+        })
       })
-    })
+    }
   }
 }
 </script>
