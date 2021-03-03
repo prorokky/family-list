@@ -6,16 +6,20 @@
         <button class="info">i</button>
       </router-link>
       <button class="delete"
-              @click="deleteMember(member.id)">&times;
+              @click="deleteMember = true">&times;
       </button>
+      <DeleteMember v-if="deleteMember" @close="deleteMember = false" @deleteMemberFunc="deleteMemberFunc" v-bind:id="member.id"/>
     </p>
     <p class="td">{{ member.birthDate }}</p>
   </div>
 </template>
 
 <script>
+import DeleteMember from "@/components/DeleteMember";
+
 export default {
   name: "MembersList",
+  components: {DeleteMember},
   props: {
     member: {
       type: Object
@@ -24,11 +28,17 @@ export default {
       type: Array
     }
   },
+  data: () => {
+    return {
+      deleteMember: false
+    }
+  },
   methods: {
-    deleteMember: function (id) {
+    deleteMemberFunc: function (data) {
       this.$emit("deleteMember", {
-        id: id
+        id: data.id
       })
+      this.deleteMember = false
     }
   }
 }

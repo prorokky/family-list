@@ -5,20 +5,17 @@
         <div class="modal-wrapper">
           <div class="modal-container">
             <div class="modal-header">
-              Добавление человека
+              Вы уверены?
             </div>
             <div class="modal-body">
-              <form class="addForm">
-                <label>ФИО<input type="text" v-model="fio"></label><br>
-                <label>Дата рождения<input type="date" min="1900-01-01" max="2021-01-01" v-model="birth"></label>
-              </form>
-              <button @click="add">
-                Создать
-              </button>
               <button @click="close">
-                Закрыть
+              Отмена
+            </button>
+              <button @click="deleteMem(id)">
+                ОК
               </button>
             </div>
+
           </div>
         </div>
       </div>
@@ -35,18 +32,16 @@ export default {
       birth: ""
     }
   },
+  props: {
+    id: {
+      type: Number
+    }
+  },
   methods: {
-    add: function () {
-      if (!this.fio) {
-        alert("Введите имя")
-      } else if (!this.birth) {
-        alert("Введите дату")
-      } else {
-        this.$emit("add", {
-          name: this.fio,
-          birthDate: this.birth
-        })
-      }
+    deleteMem: function (id) {
+        this.$emit("deleteMemberFunc", {
+          id: id
+      })
     },
     close: function() {
       this.$emit("close")
@@ -75,7 +70,7 @@ export default {
 
 .modal-container {
   width: 300px;
-  height: 200px;
+  height: 100px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
@@ -93,24 +88,9 @@ export default {
   margin: 15px 0;
 }
 
-form {
-  text-align: left;
-}
-
-form input {
-  height: 25px;
-  width: 100%;
-  margin: 5px;
-}
-
-form label {
-  padding: 5px;
-}
-
 button {
   margin-top: 10px;
   margin-left: 10px;
-  float: right;
   font-size: 18px;
 }
 </style>

@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     addMember: function (data) {
-      let newMember = {id: this.members.length + 1, name: data.name, birthDate: data.birthDate}
+      let newMember = {id: this.members.length + 1, name: data.name, birthDate: data.birthDate, relatives: ""}
       this.members.push(newMember)
     },
     deleteMember: function (data) {
@@ -45,6 +45,17 @@ export default {
             elem.birthDate.indexOf(search) > -1
       })
     }
+  },
+  mounted: function() {
+    this.members.forEach(ms => {
+      this.$route.query.members.forEach(rm => {
+        if(ms.id === rm.id) {
+          ms.name = rm.name
+          ms.birthDate = rm.birthDate
+          ms.relatives = rm.relatives
+        }
+      })
+    })
   }
 }
 </script>
