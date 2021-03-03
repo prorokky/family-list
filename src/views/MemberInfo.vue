@@ -1,52 +1,42 @@
 <template>
   <div class="detail">
-      <p class="title">Подробная информация</p>
-      <div class="field">
-        <label for="fio">ФИО</label>
-        <p class="info-text" v-if="!editName">
-          {{this.$route.query.members[this.$attrs.id].name}}
-          <button @click="editName = true">Редактировать</button>
-        </p>
-        <p v-if="editName">
-          <input type="text" id="fio" v-model="editNameText">
-          <button @click="editNameFunc">Сохранить</button>
-        </p>
-      </div>
-      <div class="field">
-        <label for="db">Дата рождения</label>
-        <p class="info-text" v-if="!editBirth">
-          {{this.$route.query.members[this.$attrs.id].birthDate}}
-          <button @click="editBirth = true">Редактировать</button>
-        </p>
-        <p v-if="editBirth">
-          <input type="date" min="1900-01-01" max="2021-01-01" id="db" v-model="editBirthText">
-          <button @click="editBirthFunc">Сохранить</button>
-        </p>
-      </div>
-      <div class="field">
-        <label for="rel">Список родтсвенников (введите ФИО через запятую)</label>
-        <p class="info-text" v-if="!editRelatives">
-          {{this.$route.query.members[this.$attrs.id].relatives.join(",")}}
-          <button @click="editRelatives = true">Редактировать</button>
-        </p>
-        <p v-if="editRelatives">
-          <input type="text" id="rel" v-model="editRelativesText">
-          <button @click="editRelativesFunc">Сохранить</button>
-        </p>
-      </div>
-      <router-link :to="{ path: '/', query: { members: this.$route.query.members } }">
-        Главная страница
-      </router-link>
+    <p class="title">Подробная информация</p>
+    <EditMemberName
+        v-bind:memberName="editNameText"
+        v-model="editNameText"
+        @editNameFunc="editNameFunc"
+    />
+    <EditMemberBirth
+        v-bind:memberBirth="editBirthText"
+        v-model="editBirthText"
+        @editBirthFunc="editBirthFunc"
+    />
+    <div class="field">
+      <label for="rel">Список родтсвенников (введите ФИО через запятую)</label>
+      <p class="info-text" v-if="!editRelatives">
+        {{ this.$route.query.members[this.$attrs.id].relatives.join(",") }}
+        <button @click="editRelatives = true">Редактировать</button>
+      </p>
+      <p v-if="editRelatives">
+        <input type="text" id="rel" v-model="editRelativesText">
+        <button @click="editRelativesFunc">Сохранить</button>
+      </p>
+    </div>
+    <router-link :to="{ path: '/', query: { members: this.$route.query.members } }">
+      Главная страница
+    </router-link>
   </div>
 </template>
 
 <script>
+import EditMemberName from "@/components/EditMemberName";
+import EditMemberBirth from "@/components/EditMemberBirth";
+
 export default {
   name: "MemberInfo",
-  data: function() {
+  components: {EditMemberName, EditMemberBirth},
+  data: function () {
     return {
-      editName: false,
-      editBirth: false,
       editRelatives: false,
       editNameText: this.$route.query.members[this.$attrs.id].name,
       editBirthText: this.$route.query.members[this.$attrs.id].birthDate,
@@ -56,11 +46,9 @@ export default {
   methods: {
     editNameFunc() {
       this.$route.query.members[this.$attrs.id].name = this.editNameText
-      this.editName = false
     },
     editBirthFunc() {
       this.$route.query.members[this.$attrs.id].birthDate = this.editBirthText
-      this.editBirth = false
     },
     editRelativesFunc() {
       let arr = this.$route.query.members[this.$attrs.id].relatives,

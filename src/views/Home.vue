@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     addMember: function (data) {
-      let newMember = {id: this.members.length + 1, name: data.name, birthDate: data.birthDate, relatives: ""}
+      let newMember = {id: this.members.length + 1, name: data.name, birthDate: data.birthDate, relatives: []}
       this.members.push(newMember)
     },
     deleteMember: function (data) {
@@ -38,13 +38,13 @@ export default {
   },
   computed: {
     filteredMembers: function () {
-      let search = this.search.toLowerCase()
-      return this.members.filter((elem) => {
-        if (search === "") return true;
-        else return elem.name.toLowerCase().indexOf(search) > -1 ||
-            elem.birthDate.indexOf(search) > -1
-      })
-    }
+        let search = this.search.toLowerCase()
+        return this.members.filter((elem) => {
+          if (search === "") return true;
+          else return elem.name.toLowerCase().indexOf(search) > -1 ||
+              elem.birthDate.indexOf(search) > -1
+        })
+      }
   },
   mounted: function() {
     this.members.forEach(ms => {
