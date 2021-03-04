@@ -8,7 +8,6 @@
       <p class="empty">Список родственников пуст. Добавьте родственника.</p>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -21,15 +20,15 @@ export default {
   data: () => {
     return {
       members: [
-        {id: 0, name: "Петров Петр Петрович", birthDate: "2001-01-01", relatives: ["Иванов Иван Иванович"]},
-        {id: 1, name: "Иванов Иван Иванович", birthDate: "1997-02-01", relatives: ["Петров Петр Петрович"]}
+        {id: 0, name: "Петров Петр Петрович", birthDate: "2001-01-01", relatives: "Иванов Иван Иванович"},
+        {id: 1, name: "Иванов Иван Иванович", birthDate: "1997-02-01", relatives: "Петров Петр Петрович"}
       ],
       search: "",
     }
   },
   methods: {
     addMember: function (data) {
-      let newMember = {id: this.members.length + 1, name: data.name, birthDate: data.birthDate, relatives: []}
+      let newMember = {id: this.members.length + 1, name: data.name, birthDate: data.birthDate, relatives: ""}
       this.members.push(newMember)
     },
     deleteMember: function (data) {
@@ -48,14 +47,9 @@ export default {
   },
   mounted: function() {
     if(this.$route.query.members !== undefined) {
-      this.members.forEach(ms => {
-        this.$route.query.members.forEach(rm => {
-          if(ms.id === rm.id) {
-            ms.name = rm.name
-            ms.birthDate = rm.birthDate
-            ms.relatives = rm.relatives
-          }
-        })
+      this.members.splice(0, this.members.length)
+      this.$route.query.members.forEach(ms => {
+        this.members.push(ms)
       })
     }
   }

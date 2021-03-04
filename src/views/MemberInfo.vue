@@ -11,17 +11,13 @@
         v-model="editBirthText"
         @editBirthFunc="editBirthFunc"
     />
-    <div class="field">
-      <label for="rel">Список родтсвенников (введите ФИО через запятую)</label>
-      <p class="info-text" v-if="!editRelatives">
-        {{ this.$route.query.members[this.$attrs.id].relatives.join(",") }}
-        <button @click="editRelatives = true">Редактировать</button>
-      </p>
-      <p v-if="editRelatives">
-        <input type="text" id="rel" v-model="editRelativesText">
-        <button @click="editRelativesFunc">Сохранить</button>
-      </p>
-    </div>
+    <EditMemberRelatives
+        v-bind:memberRelatives="editRelativesText"
+        v-model="editRelativesText"
+        v-bind:editRelatives="editRelatives"
+        @edit="editRelatives = true"
+        @editRelativesFunc="editRelativesFunc"
+    />
     <router-link :to="{ path: '/', query: { members: this.$route.query.members } }">
       Главная страница
     </router-link>
@@ -31,10 +27,11 @@
 <script>
 import EditMemberName from "@/components/EditMemberName";
 import EditMemberBirth from "@/components/EditMemberBirth";
+import EditMemberRelatives from "@/components/EditMemberRelatives";
 
 export default {
   name: "MemberInfo",
-  components: {EditMemberName, EditMemberBirth},
+  components: {EditMemberName, EditMemberBirth, EditMemberRelatives},
   data: function () {
     return {
       editRelatives: false,
@@ -51,13 +48,20 @@ export default {
       this.$route.query.members[this.$attrs.id].birthDate = this.editBirthText
     },
     editRelativesFunc() {
-      let arr = this.$route.query.members[this.$attrs.id].relatives,
-          relatives = this.editRelativesText.toString().split(",")
-      arr.splice(0, arr.length)
-      relatives.forEach(el => {
-        arr.push(el)
-      })
-      this.editRelatives = false
+      let members = this.$route.query.members,
+          relatives = this.editRelativesText.split(','),
+          flag = true
+      members = members.map(mem => mem.name)
+      relatives.forEach(relative => members.includes(relative) ? '' : flag = false)
+      if (relatives[0] === "") {
+        this.$route.query.members[this.$attrs.id].relatives = this.editRelativesText
+        this.editRelatives = false
+      } else if (!flag) {
+        alert("Родственник введен неверно")
+      } else {
+        this.$route.query.members[this.$attrs.id].relatives = this.editRelativesText
+        this.editRelatives = false
+      }
     }
   }
 }
@@ -74,29 +78,6 @@ export default {
   font-size: 20px;
 }
 
-.field {
-  clear: both;
-  text-align: right;
-  line-height: 25px;
-}
-
-input {
-  height: 25px;
-  width: 350px;
-}
-
-label {
-  float: left;
-  padding-right: 10px;
-  color: black;
-}
-
-.info-text {
-  height: 25px;
-  padding-right: 10px;
-  color: black;
-}
-
 a {
   text-decoration: none;
   color: blue;
@@ -107,12 +88,5 @@ a {
 router-link-active {
   text-decoration: none;
   color: blue;
-}
-
-button {
-  height: 25px;
-  margin: 5px;
-  padding: 0;
-  font-size: 16px;
 }
 </style>
