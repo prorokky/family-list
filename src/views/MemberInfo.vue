@@ -12,8 +12,9 @@
         @editBirthFunc="editBirthFunc"
     />
     <EditMemberRelatives
-        v-bind:memberRelatives="editRelativesText"
-        v-model="editRelativesText"
+        v-bind:members="this.$route.query.members"
+        v-bind:relatives="this.$route.query.members[this.$attrs.id].relatives"
+        v-bind:editNameText="editNameText"
         v-bind:editRelatives="editRelatives"
         @edit="editRelatives = true"
         @editRelativesFunc="editRelativesFunc"
@@ -36,8 +37,7 @@ export default {
     return {
       editRelatives: false,
       editNameText: this.$route.query.members[this.$attrs.id].name,
-      editBirthText: this.$route.query.members[this.$attrs.id].birthDate,
-      editRelativesText: this.$route.query.members[this.$attrs.id].relatives
+      editBirthText: this.$route.query.members[this.$attrs.id].birthDate
     }
   },
   methods: {
@@ -47,21 +47,12 @@ export default {
     editBirthFunc() {
       this.$route.query.members[this.$attrs.id].birthDate = this.editBirthText
     },
-    editRelativesFunc() {
-      let members = this.$route.query.members,
-          relatives = this.editRelativesText.split(','),
-          flag = true
-      members = members.map(mem => mem.name)
-      relatives.forEach(relative => members.includes(relative) ? '' : flag = false)
-      if (relatives[0] === "") {
-        this.$route.query.members[this.$attrs.id].relatives = this.editRelativesText
-        this.editRelatives = false
-      } else if (!flag) {
-        alert("Родственник введен неверно")
-      } else {
-        this.$route.query.members[this.$attrs.id].relatives = this.editRelativesText
-        this.editRelatives = false
-      }
+    editRelativesFunc(data) {
+      this.$route.query.members[this.$attrs.id].relatives = []
+      data.newRelatives.forEach(el => {
+        this.$route.query.members[this.$attrs.id].relatives.push(el)
+      })
+      this.editRelatives = false
     }
   }
 }

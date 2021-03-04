@@ -20,15 +20,16 @@ export default {
   data: () => {
     return {
       members: [
-        {id: 0, name: "Петров Петр Петрович", birthDate: "2001-01-01", relatives: "Иванов Иван Иванович"},
-        {id: 1, name: "Иванов Иван Иванович", birthDate: "1997-02-01", relatives: "Петров Петр Петрович"}
+        {id: 0, name: "Петров Петр Петрович", birthDate: "2001-01-01", relatives: ["Иванов Иван Иванович"]},
+        {id: 1, name: "Иванов Иван Иванович", birthDate: "1997-02-01", relatives: ["Петров Петр Петрович"]},
+        {id: 2, name: "Иванов Петр Иванович", birthDate: "1997-02-01", relatives: []}
       ],
       search: "",
     }
   },
   methods: {
     addMember: function (data) {
-      let newMember = {id: this.members.length + 1, name: data.name, birthDate: data.birthDate, relatives: ""}
+      let newMember = {id: this.members.length + 1, name: data.name, birthDate: data.birthDate, relatives: []}
       this.members.push(newMember)
     },
     deleteMember: function (data) {

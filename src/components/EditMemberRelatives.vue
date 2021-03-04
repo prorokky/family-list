@@ -1,12 +1,16 @@
 <template>
   <div class="field">
-    <label for="rel">Список родтсвенников (введите ФИО через запятую)</label>
+    <label for="rel">Список родтсвенников (несколько родственников выбрать через shift)</label>
     <p class="info-text" v-if="!editRelatives">
-      {{ memberRelatives }}
+      {{ relatives.join(",") }}
       <button @click="$emit('edit')">Редактировать</button>
     </p>
     <p v-if="editRelatives">
-      <input type="text" id="rel" v-bind:value="value" v-on:input="$emit('input', $event.target.value)">
+      <select id="rel" v-model="editRelativesText" multiple>
+        <option v-for="member in members" v-if="member.name !== editNameText">
+          {{member.name}}
+        </option>
+      </select>
       <button @click="editRelativesFunc">Сохранить</button>
     </p>
   </div>
@@ -17,24 +21,31 @@ export default {
   name: "EditMemberRelatives",
   props: {
     value: {
-      type: String
+      type: Array
     },
-    memberRelatives: {
-      type: String
+    members: {
+      type: Array
     },
     editRelatives: {
       type: Boolean
+    },
+    editNameText: {
+      type: String
+    },
+    relatives: {
+      type: Array
     }
   },
   data: () => {
     return {
-      //editRelatives: false
+      editRelativesText: []
     }
   },
   methods: {
     editRelativesFunc() {
-      this.$emit("editRelativesFunc")
-      //this.editRelatives = false
+      this.$emit("editRelativesFunc", {
+        newRelatives: this.editRelativesText
+      })
     }
   }
 }
@@ -50,6 +61,12 @@ export default {
 input {
   height: 25px;
   width: 350px;
+}
+
+select {
+  height: 50px;
+  width: 350px;
+  margin-right: 15px;
 }
 
 label {
